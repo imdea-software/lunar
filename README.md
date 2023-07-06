@@ -1,6 +1,6 @@
 # Lunar
 
-`lunar` is a Rust library that implements some of the Lunar zkSNARKs, namely LunarLite and LunarLite2x, and corresponding building blocks proposed in [1].
+`lunar` is a Rust library that implements some of the Lunar zkSNARKs, namely LunarLite and LunarLite2x, and corresponding building blocks proposed in [CFFQR21].
 
 **WARNING:** This is an academic prototype, and in particular has not received careful code review. This implementation is NOT ready for production use.
 
@@ -15,10 +15,10 @@
 ## Overview
 
 Description of the different modules:
- - phplite2: Implements the prover and verifier for R1CSlite2 and R1CSlite2x;
- - comms: Implements the typed commitment scheme for CS1 and CS2;
+ - phplite2: Implements the prover and verifier of the two Polynomial Holographic IOPs (PHP) for the R1CSlite constraint-system: PHPlite2 and PHPlite2x;
+ - comms: Implements the typed commitment schemes CS1 and CS2;
  - evalpolyproofs: Implements the Commit-and-Prove gadgets for CS1 and CS2;
- - matrixutils: Utility function for matrix and polynomials;
+ - matrixutils: Utility functions for matrices and polynomials;
  - php: Implements oracle structures for polynomials and commitments;
  - r1cslite: Implements the R1CSlite to polyR1CSlite conversion;
  - lib: Implements LunarLite (based on CS2) and LunarLite2x (based on CS1).
@@ -33,9 +33,7 @@ This project uses the [arkworks](https://github.com/arkworks-rs/) ecosystem, mai
 
 You can build this project with
 
-`git clone https://gitlab.software.imdea.org/hadrian.rodriguez/lunar-implementation`
-
-After logging in with your credentials,
+`git clone https://github.com/imdea-software/lunar`
 
 ```bash
 cd lunar

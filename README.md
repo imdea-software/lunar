@@ -1,6 +1,6 @@
 # Lunar
 
-`lunar` is a Rust library that implements some of the Lunar zkSNARKs, namely LunarLite and LunarLite2x, and corresponding building blocks proposed in [CFFQR21].
+`lunar` is a Rust library that implements some of the Lunar zkSNARKs, namely LunarLite and LunarLite2x, and corresponding building blocks proposed in [the Lunar paper [CFFQR21]](https://eprint.iacr.org/2020/1069).
 
 **WARNING:** This is an academic prototype, and in particular has not received careful code review. This implementation is NOT ready for production use.
 

@@ -437,13 +437,13 @@ impl<
 }
 
 /// The compiled argument system.
-pub struct Lunar<F: FftField, P: PairingEngine + PairingEngine<Fr = F>, C: CommitmentScheme<P>>(
+pub struct LunarLite2x<F: FftField, P: PairingEngine + PairingEngine<Fr = F>, C: CommitmentScheme<P>>(
     #[doc(hidden)] PhantomData<P>,
     #[doc(hidden)] PhantomData<F>,
     #[doc(hidden)] PhantomData<C>,
 );
 
-impl<F: FftField, P: PairingEngine + PairingEngine<Fr = F>, C: CommitmentScheme<P>> Lunar<F, P, C> {
+impl<F: FftField, P: PairingEngine + PairingEngine<Fr = F>, C: CommitmentScheme<P>> LunarLite2x<F, P, C> {
     pub const PROTOCOL_NAME: &'static [u8] = b"LUNAR-2022";
 
     pub fn setup_relation_encoder<R>(
@@ -509,14 +509,13 @@ impl<F: FftField, P: PairingEngine + PairingEngine<Fr = F>, C: CommitmentScheme<
 
         // Parameters specific to R1CSLite2
         // imported from the prover.rs file
-        // Are those parameters fixed?
         const b_a: usize = 1;
         const b_b: usize = 2;
         const b_q: usize = 1;
         // const b_r: usize = 1;
         const b_s: usize = 1;
 
-        // Setup of the CS parameters // change with max values for n and m
+        // Setup of the CS parameters
         let D = cmp::max(
             2 * cs_max_degree + b_a + b_b + 2 * b_q - 3,
             cmp::max(cs_max_degree + b_s + b_q - 1, m),

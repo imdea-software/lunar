@@ -1,6 +1,6 @@
 # Lunar
 
-`lunar` is a Rust library that implements (some of) the Lunar zkSNARKs and corresponding building blocks proposed in [1].
+`lunar` is a Rust library that implements some of the Lunar zkSNARKs, namely LunarLite and LunarLite2x, and corresponding building blocks proposed in [1].
 
 **WARNING:** This is an academic prototype, and in particular has not received careful code review. This implementation is NOT ready for production use.
 
@@ -20,7 +20,8 @@ Description of the different modules:
  - evalpolyproofs: Implements the Commit-and-Prove gadgets for CS1 and CS2;
  - matrixutils: Utility function for matrix and polynomials;
  - php: Implements oracle structures for polynomials and commitments;
- - r1cslite: Implements the R1CSlite to polyR1CSlite conversion.
+ - r1cslite: Implements the R1CSlite to polyR1CSlite conversion;
+ - lib: Implements LunarLite (based on CS2) and LunarLite2x (based on CS1).
 
 ## How to install
 

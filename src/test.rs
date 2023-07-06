@@ -700,7 +700,7 @@ where
         php_v_view,
         c_p_view,
         &mut fs_rng,
-    );
+    ).unwrap();
 
     R1CSLite2x::prover_precomput(
         prover_PP,
@@ -709,12 +709,13 @@ where
         php_v_view,
         c_p_view,
         &mut fs_rng,
-    );
+    ).unwrap();
 
     let proofs: (P::G1Projective, P::G1Projective) = R1CSLite2x::prover_proofs(
-        prover_PP, cs_pp, php_p_view,
+        prover_PP, cs_pp, 
+        php_p_view,
         // Only here to satisfy the requirement for P
-        c_p_view, // To be removed
+        c_p_view,
     )?;
 
     Ok(proofs)
@@ -762,25 +763,6 @@ where
     let x = php_v_view.get_scalar("x").unwrap();
     let y = php_v_view.get_scalar("y").unwrap();
 
-    // let (c_p_prime_eq1, p_eq1_prime_at_y) = verifier_phplite2_precompute_eq1::<P, C, _>(
-    //     &verifier_PP,
-    //     &mut php_v_view,
-    //     prover_view,
-    //     cs_pp,
-    //     &prover_commits,
-    //     &mut fs_rng,
-    // );
-
-    // let (c_p_prime_eq2_degs, p_prime_eq2_degs_at_y2) =
-    //     verifier_phplite2x_precompute_eq2_deg_checks::<P, C, _>(
-    //         &verifier_PP,
-    //         &mut php_v_view,
-    //         prover_view,
-    //         cs_pp,
-    //         &prover_commits,
-    //         &mut fs_rng,
-    //     );
-
     let ((c_p_prime_eq1, p_eq1_prime_at_y), (c_p_prime_eq2_degs, p_prime_eq2_degs_at_y2)) =
         R1CSLite2x::verifier_precompute(
             &verifier_PP,
@@ -825,8 +807,7 @@ pub fn full_phplite2_prover_verifier_composed<P, F, C>(
 ) where
     P: PairingEngine + PairingEngine<Fr = F>,
     F: FftField,
-    C: CommitmentScheme<P, CS_PP = CS2_PP<P>> + CPEval<P, C> + CPdeg<P, C> + CPqeq<P, C>, // Find a way to remove CS_PP condition
-                                                                                          //RNG: rand_core::RngCore
+    C: CommitmentScheme<P, CS_PP = CS2_PP<P>> + CPEval<P, C> + CPdeg<P, C> + CPqeq<P, C>,
 {
     // let mut rng = thread_rng();
     let mut rng = &mut ark_std::test_rng();
@@ -849,9 +830,7 @@ pub fn full_phplite2_prover_verifier_composed<P, F, C>(
     } = example_simple_v2::<F, _>(n_example, n_next_pow2, l, &mut rng);
 
     let cs = CSLiteParams::new(n_next_pow2, n_next_pow2, l, L, R);
-    //let oracles_vec = R1CSLite2::setup(&cs);
 
-    //let k_domain_size = m;
     // initialize parameters for prover
     let prover_PP = ProverPP {
         cs: cs.clone(),

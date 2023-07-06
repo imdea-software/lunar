@@ -26,7 +26,6 @@ macro_rules! lunarlite_setup_bench {
 
 	    let n_next_pow2 = ((3*n_example) as usize).next_power_of_two();
 
-
         let now_global = Instant::now();
 
         for _ in 0..NUM_SETUP_REPETITIONS {
@@ -157,7 +156,7 @@ macro_rules! lunarlite_verify_bench {
     };
 }
 
-macro_rules! lunar_setup_bench {
+macro_rules! lunarlite2x_setup_bench {
     ($bench_name:ident, $bench_field:ty, $bench_pairing_engine:ty, $bench_commit_scheme:ty, $bench_cs_pow:expr, $bench_param:expr) => {
         let mut rng = &mut thread_rng();
         // let rng = &mut ark_std::test_rng();
@@ -173,7 +172,7 @@ macro_rules! lunar_setup_bench {
             let exampler1cslite =
                 example_simple_v2::<$bench_field, _>(n_example, n_next_pow2, l, rng);
 
-            let _ = Lunar::<
+            let _ = LunarLite2x::<
                         $bench_field,
                         $bench_pairing_engine,
                         $bench_commit_scheme
@@ -189,7 +188,7 @@ macro_rules! lunar_setup_bench {
     };
 }
 
-macro_rules! lunar_prove_bench {
+macro_rules! lunarlite2x_prove_bench {
     ($bench_name:ident, $bench_field:ty, $bench_pairing_engine:ty, $bench_commit_scheme:ty, $bench_cs_pow:expr, $bench_param:expr) => {
         let mut rng = &mut thread_rng();
         // let rng = &mut ark_std::test_rng();
@@ -201,7 +200,7 @@ macro_rules! lunar_prove_bench {
         let exampler1cslite = example_simple_v2::<$bench_field, _>(n_example, n_next_pow2, l, rng);
 
         let ((prover_PP, verifier_PP, cs_pp),
-                     (mut php_prover_view, mut php_verifier_view, mut prover_Cview)) = Lunar::<
+                     (mut php_prover_view, mut php_verifier_view, mut prover_Cview)) = LunarLite2x::<
                     $bench_field,
                     $bench_pairing_engine,
                     $bench_commit_scheme
@@ -211,7 +210,7 @@ macro_rules! lunar_prove_bench {
         let now = Instant::now();
 
         for _ in 0..NUM_PROVE_REPETITIONS {
-            let proofs = Lunar::<$bench_field, $bench_pairing_engine, $bench_commit_scheme>::prover(
+            let proofs = LunarLite2x::<$bench_field, $bench_pairing_engine, $bench_commit_scheme>::prover(
                 &prover_PP,
                 &verifier_PP,
                 &cs_pp,
@@ -229,7 +228,7 @@ macro_rules! lunar_prove_bench {
     };
 }
 
-macro_rules! lunar_verify_bench {
+macro_rules! lunarlite2x_verify_bench {
     ($bench_name:ident, $bench_field:ty, $bench_pairing_engine:ty, $bench_commit_scheme:ty, $bench_cs_pow:expr, $bench_param:expr) => {
         let mut rng = &mut thread_rng();
         // let rng = &mut ark_std::test_rng();
@@ -245,7 +244,7 @@ macro_rules! lunar_verify_bench {
 
         let ((prover_PP, verifier_PP, cs_pp),
                      (mut php_prover_view, mut php_verifier_view, mut prover_Cview)
-                     ) = Lunar::<
+                     ) = LunarLite2x::<
                         $bench_field,
                         $bench_pairing_engine,
                         $bench_commit_scheme
@@ -253,7 +252,7 @@ macro_rules! lunar_verify_bench {
                             n_max, n_example, m, l, exampler1cslite, cs_max_degree, &mut rng);
 
 
-        let proofs = Lunar::<$bench_field, $bench_pairing_engine, $bench_commit_scheme>::prover(
+        let proofs = LunarLite2x::<$bench_field, $bench_pairing_engine, $bench_commit_scheme>::prover(
             &prover_PP,
             &verifier_PP,
             &cs_pp,
@@ -265,7 +264,7 @@ macro_rules! lunar_verify_bench {
 
         let now = Instant::now();
         for _ in 0..NUM_VERIFY_REPETITIONS {
-            let _ = Lunar::<$bench_field, $bench_pairing_engine, $bench_commit_scheme>::verifier(
+            let _ = LunarLite2x::<$bench_field, $bench_pairing_engine, $bench_commit_scheme>::verifier(
                 &verifier_PP,
                 &cs_pp,
                 &mut php_verifier_view,
@@ -355,8 +354,8 @@ fn bench_verify_lunarlite() {
     println!("BENCHMARK FOR THE VERIFIER DONE\n\n\n");
 }
 
-fn bench_setup_lunar() {
-    println!("\n\n\nBENCHMARK FOR THE LUNAR SETUP START\n");
+fn bench_setup_lunarlite2x() {
+    println!("\n\n\nBENCHMARK FOR THE LUNARLITE2X SETUP START\n");
 
     let power = 20;
     let cs_max_degree = 2_usize.pow(power);
@@ -367,7 +366,7 @@ fn bench_setup_lunar() {
 
 
     println!("PARAMETER SETUP: power = {:?}, cs_max_degree = {:?}, nmax = {:?}, n_example = {:?}, m = {:?}, l = {:?}", power, cs_max_degree, n_max,n_example,m,l);
-    lunar_setup_bench!(
+    lunarlite2x_setup_bench!(
         bls,
         bls12_381_fr,
         Bls12_381,
@@ -376,11 +375,11 @@ fn bench_setup_lunar() {
         (n_max, n_example, m, l)
     );
 
-    println!("BENCHMARK FOR THE LUNAR SETUP DONE\n\n\n");
+    println!("BENCHMARK FOR THE LUNARLITE2X SETUP DONE\n\n\n");
 }
 
-fn bench_prove_lunar() {
-    println!("\n\n\nBENCHMARK FOR THE LUNAR PROVER START");
+fn bench_prove_lunarlite2x() {
+    println!("\n\n\nBENCHMARK FOR THE LUNARLITE2X PROVER START");
 
     let power = 20;
     let cs_max_degree = 2_usize.pow(power);
@@ -390,7 +389,7 @@ fn bench_prove_lunar() {
     let l = 30;
 
     println!("PARAMETER SETUP: power = {:?}, cs_max_degree = {:?}, nmax = {:?}, n_example = {:?}, m = {:?}, l = {:?}", power, cs_max_degree, n_max,n_example,m,l);
-    lunar_prove_bench!(
+    lunarlite2x_prove_bench!(
         bls,
         bls12_381_fr,
         Bls12_381,
@@ -399,11 +398,11 @@ fn bench_prove_lunar() {
         (n_max, n_example, m, l)
     );
 
-    println!("BENCHMARK FOR THE LUNAR PROVER DONE\n\n\n");
+    println!("BENCHMARK FOR THE LUNARLITE2X PROVER DONE\n\n\n");
 }
 
-fn bench_verify_lunar() {
-    println!("\n\n\nBENCHMARK FOR THE LUNAR VERIFIER START");
+fn bench_verify_lunarlite2x() {
+    println!("\n\n\nBENCHMARK FOR THE LUNARLITE2X VERIFIER START");
 
     let power = 20;
     let cs_max_degree = 2_usize.pow(power);
@@ -413,7 +412,7 @@ fn bench_verify_lunar() {
     let l = 30;
 
     println!("PARAMETER SETUP: power = {:?}, cs_max_degree = {:?}, nmax = {:?}, n_example = {:?}, m = {:?}, l = {:?}", power, cs_max_degree, n_max,n_example,m,l);
-    lunar_verify_bench!(
+    lunarlite2x_verify_bench!(
         bls,
         bls12_381_fr,
         Bls12_381,
@@ -422,7 +421,7 @@ fn bench_verify_lunar() {
         (n_max, n_example, m, l)
     );
     
-    println!("BENCHMARK FOR THE LUNAR VERIFIER DONE\n\n\n");
+    println!("BENCHMARK FOR THE LUNARLITE2X VERIFIER DONE\n\n\n");
 }
 
 fn main() {
@@ -431,8 +430,8 @@ fn main() {
     bench_prove_lunarlite();
     bench_verify_lunarlite();
 
-    bench_setup_lunar();
-    bench_prove_lunar();
-    bench_verify_lunar();
+    bench_setup_lunarlite2x();
+    bench_prove_lunarlite2x();
+    bench_verify_lunarlite2x();
 
 }
